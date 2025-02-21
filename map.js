@@ -11,29 +11,34 @@ const map = new mapboxgl.Map({
     maxZoom: 18
 });
 
+// Select the existing SVG inside #map (from index.html)
+const svg = d3.select("#map").select("svg");
+let stations = [];  // Empty array for bike station data
+
+// Function to convert latitude/longitude to pixel coordinates
+function getCoords(station) {
+    const point = new mapboxgl.LngLat(+station.Long, +station.Lat);
+    const { x, y } = map.project(point);
+    return { cx: x, cy: y };
+}
+
+// --- STEP 1: Load and Render Bike Lanes ---
 map.on('load', () => {
     console.log("Map has loaded");
 
-    // Define a shared style object for consistency
+    // Define a shared style object for bike lanes
     const bikeLaneStyle = {
         'line-color': '#228B22',  // Dark green
         'line-width': 2.5,        // Slightly thinner
         'line-opacity': 0.4       // More transparent
     };
 
-    // Add Boston bike lanes source
+    // Add Boston bike lanes
     map.addSource('boston_route', {
         type: 'geojson',
         data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson?...'
     });
 
-    // Add Cambridge bike lanes source
-    map.addSource('cambridge_route', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/cambridgegis/cambridgegis_data/main/Recreation/Bike_Facilities/RECREATION_BikeFacilities.geojson'
-    });
-
-    // Add Boston bike lanes layer
     map.addLayer({
         id: 'bike-lanes-boston',
         type: 'line',
@@ -41,7 +46,12 @@ map.on('load', () => {
         paint: bikeLaneStyle
     });
 
-    // Add Cambridge bike lanes layer
+    // Add Cambridge bike lanes
+    map.addSource('cambridge_route', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/cambridgegis/cambridgegis_data/main/Recreation/Bike_Facilities/RECREATION_BikeFacilities.geojson'
+    });
+
     map.addLayer({
         id: 'bike-lanes-cambridge',
         type: 'line',
@@ -49,41 +59,44 @@ map.on('load', () => {
         paint: bikeLaneStyle
     });
 
-    // --- STEP 3: Load Bluebikes Stations ---
+    // --- STEP 2: Load Bluebikes Stations ---
     const jsonUrl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
 
     d3.json(jsonUrl).then(jsonData => {
         console.log('Loaded JSON Data:', jsonData);
 
         // Extract station data
-        const stations = jsonData.data.stations;
+        stations = jsonData.data.stations;
         console.log('Stations Array:', stations);
 
-        // Create an SVG overlay
-        const svg = d3.select("#map").append("svg")
-            .attr("class", "stations-overlay");
-
-        // Project longitude & latitude into map coordinates
-        function projectPoint(lon, lat) {
-            const point = map.project(new mapboxgl.LngLat(lon, lat));
-            return [point.x, point.y];
-        }
-
-        // Add circle markers for each station
-        svg.selectAll("circle")
+        // Append circles for each station
+        const circles = svg.selectAll("circle")
             .data(stations)
             .enter()
             .append("circle")
-            .attr("cx", d => projectPoint(d.Long, d.Lat)[0])
-            .attr("cy", d => projectPoint(d.Long, d.Lat)[1])
-            .attr("r", 4)  // Marker size
-            .attr("fill", "#FF4500")  // Orange-Red color for visibility
-            .attr("opacity", 0.75)
-            .attr("stroke", "black")  // Adds a small border
-            .attr("stroke-width", 0.5);
+            .attr("r", 5)               // Marker size
+            .attr("fill", "steelblue")  // Circle color
+            .attr("stroke", "white")    // Border color
+            .attr("stroke-width", 1)    // Border thickness
+            .attr("opacity", 0.8);      // Circle transparency
 
-        console.log("Bike stations added to the map");
+        console.log("Bike stations added!");
 
+        // Initial positioning of markers
+        updatePositions();
+
+        // Reposition markers on map interactions
+        map.on('move', updatePositions);
+        map.on('zoom', updatePositions);
+        map.on('resize', updatePositions);
+        map.on('moveend', updatePositions);
+
+        // Function to update circle positions dynamically
+        function updatePositions() {
+            circles
+                .attr("cx", d => getCoords(d).cx) // Update x position
+                .attr("cy", d => getCoords(d).cy); // Update y position
+        }
     }).catch(error => {
         console.error('Error loading JSON:', error);
     });
