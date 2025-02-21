@@ -18,16 +18,17 @@ map.on('load', () => {
         data: 'https://opendata.arcgis.com/datasets/7a7832f3c52449dfad6728d1ebfbb5b1_3.geojson'
     });
 
-    // Add a layer to display the bike lanes
+    // Add a layer to display the bike lanes with custom styling
     map.addLayer({
         id: 'bike-lanes',
         type: 'line',
         source: 'boston_route',
         paint: {
-            'line-color': 'green', // Make bike lanes green
-            'line-width': 3,       // Line thickness
-            'line-opacity': 0.6    // Slight transparency for visibility
+            'line-color': '#32D400',  // Bright green for high visibility
+            'line-width': 5,          // Make the lines thicker
+            'line-opacity': 0.6       // Slight transparency for better integration with the map
         }
     });
 });
+
 
