@@ -16,7 +16,7 @@ map.on('load', () => {
     const bikeLaneStyle = {
         'line-color': '#228B22',  // Bright green
         'line-width': 2.5,          // Thicker lines
-        'line-opacity': 0.6       // More visible
+        'line-opacity': 0.4       // More visible
     };
 
     // Add Boston bike lanes source
