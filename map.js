@@ -12,22 +12,39 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', () => {
-    // Add a data source for Boston bike lanes
+    // Define a shared style object to avoid repetition
+    const bikeLaneStyle = {
+        'line-color': '#32D400',  // Bright green
+        'line-width': 5,          // Thicker lines
+        'line-opacity': 0.6       // Slight transparency
+    };
+
+    // Add Boston bike lanes source
     map.addSource('boston_route', {
         type: 'geojson',
         data: 'https://opendata.arcgis.com/datasets/7a7832f3c52449dfad6728d1ebfbb5b1_3.geojson'
     });
 
-    // Add a layer to display the bike lanes with custom styling
+    // Add Cambridge bike lanes source
+    map.addSource('cambridge_route', {
+        type: 'geojson',
+        data: 'https://data.cambridgema.gov/api/geospatial/gb5w-yva3?method=export&format=GeoJSON'
+    });
+
+    // Add Boston bike lanes layer
     map.addLayer({
-        id: 'bike-lanes',
+        id: 'bike-lanes-boston',
         type: 'line',
         source: 'boston_route',
-        paint: {
-            'line-color': '#32D400',  // Bright green for high visibility
-            'line-width': 5,          // Make the lines thicker
-            'line-opacity': 0.6       // Slight transparency for better integration with the map
-        }
+        paint: bikeLaneStyle  // Reusing the shared style object
+    });
+
+    // Add Cambridge bike lanes layer
+    map.addLayer({
+        id: 'bike-lanes-cambridge',
+        type: 'line',
+        source: 'cambridge_route',
+        paint: bikeLaneStyle  // Using the same style for consistency
     });
 });
 
