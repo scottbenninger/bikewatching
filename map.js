@@ -20,16 +20,15 @@ map.on('load', () => {
 
     // Add a layer to display the bike lanes with custom styling
     map.addLayer({
-        id: 'bike-lane-points',
-        type: 'circle',  // Change from 'line' to 'circle'
+        id: 'bike-lanes',
+        type: 'line',
         source: 'boston_route',
         paint: {
-            'circle-radius': 4,          // Adjust the circle size
-            'circle-color': '#32D400',   // Green color
-            'circle-opacity': 0.7        // Slight transparency
+            'line-color': '#32D400',  // Bright green for high visibility
+            'line-width': 5,          // Make the lines thicker
+            'line-opacity': 0.6       // Slight transparency for better integration with the map
         }
     });
-    
 });
 
 
