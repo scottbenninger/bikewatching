@@ -6,20 +6,21 @@
 html,
 body {
     margin: 0;
-    padding: 5;
+    padding: 0;
     height: 100%;
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
 #map {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 80vh;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-top: 2em;
+    border-radius: 10px;
+    margin-top: 1em;
+    position: relative;
 }
 
 #map svg {
@@ -32,26 +33,35 @@ body {
 
 h1 {
     margin: 0;
+    font-size: 1.8em;
 }
 
 header {
     display: flex;
-    align-items: baseline;
-    gap: 1em;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-top: 1em;
 }
 
 header label {
-    margin-left: auto;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
 #time-slider {
-    width: 320px;
+    width: 300px;
 }
 
-time,
-em {
-    margin-left: auto;
+.time-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin-top: 0.5em;
+    font-size: 1em;
 }
 
 #selected-time {
@@ -71,21 +81,24 @@ circle {
 }
 
 .legend {
-    margin-top: 1em;
     display: flex;
-    gap: 1px;
-    width: 100%;
-    color: white;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1em;
+    width: 90%;
 }
 
 .legend>div {
     flex: 1;
-    padding: 0.2em 0.6em;
+    padding: 0.3em 0.7em;
+    text-align: center;
+    font-size: 0.9em;
+    color: white;
 }
 
 .legend> :nth-child(1) {
     background-color: var(--color-departures);
-    border-radius: 8px 0 0 8px;
+    border-radius: 10px 0 0 10px;
 }
 
 .legend> :nth-child(2) {
@@ -93,11 +106,9 @@ circle {
     background-color: color-mix(in oklch,
             var(--color-departures) calc(100% * var(--departure-ratio)),
             var(--color-arrivals));
-    text-align: center;
 }
 
 .legend> :nth-child(3) {
     background-color: var(--color-arrivals);
-    text-align: end;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 10px 10px 0;
 }
