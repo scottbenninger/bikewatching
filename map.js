@@ -12,11 +12,11 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', () => {
-    // Define a shared style object to avoid repetition
+    // Define a shared style object for consistency
     const bikeLaneStyle = {
         'line-color': '#32D400',  // Bright green
-        'line-width': 5,          // Thicker lines
-        'line-opacity': 0.6       // Slight transparency
+        'line-width': 4,          // Thicker lines
+        'line-opacity': 0.7       // More visible
     };
 
     // Add Boston bike lanes source
@@ -36,7 +36,7 @@ map.on('load', () => {
         id: 'bike-lanes-boston',
         type: 'line',
         source: 'boston_route',
-        paint: bikeLaneStyle  // Reusing the shared style object
+        paint: bikeLaneStyle
     });
 
     // Add Cambridge bike lanes layer
@@ -44,7 +44,7 @@ map.on('load', () => {
         id: 'bike-lanes-cambridge',
         type: 'line',
         source: 'cambridge_route',
-        paint: bikeLaneStyle  // Using the same style for consistency
+        paint: bikeLaneStyle
     });
 });
 
