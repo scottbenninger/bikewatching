@@ -10,3 +10,24 @@ const map = new mapboxgl.Map({
     minZoom: 5, // Minimum allowed zoom
     maxZoom: 18 // Maximum allowed zoom
 });
+
+map.on('load', () => {
+    // Add a data source for Boston bike lanes
+    map.addSource('boston_route', {
+        type: 'geojson',
+        data: 'https://opendata.arcgis.com/datasets/7a7832f3c52449dfad6728d1ebfbb5b1_3.geojson'
+    });
+
+    // Add a layer to display the bike lanes
+    map.addLayer({
+        id: 'bike-lanes',
+        type: 'line',
+        source: 'boston_route',
+        paint: {
+            'line-color': 'green', // Make bike lanes green
+            'line-width': 3,       // Line thickness
+            'line-opacity': 0.6    // Slight transparency for visibility
+        }
+    });
+});
+
