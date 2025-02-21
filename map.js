@@ -21,7 +21,7 @@ map.on('load', () => {
     const route_style = {
         'line-color': 'green',
         'line-width': 2,
-        'line-opacity': 0.6
+        'line-opacity': 0.3
     };
 
     map.addSource('boston_route', {
@@ -114,11 +114,13 @@ map.on('load', () => {
     map.on('resize', updatePositions);
     map.on('moveend', updatePositions);
 
+
     function getCoords(station) {
         const point = new mapboxgl.LngLat(+station.lon, +station.lat);
         const { x, y } = map.project(point);
         return { cx: x, cy: y };
     }
+
 
     function updatePositions() {
         circles
@@ -126,10 +128,12 @@ map.on('load', () => {
             .attr('cy', d => getCoords(d).cy);
     }
 
+
     function formatTime(minutes) {
         const date = new Date(0, 0, 0, 0, minutes);
         return date.toLocaleString('en-US', { timeStyle: 'short' });
     }
+
 
     function filterTripsByTime(timeVal) {
         if (timeVal === -1) {
@@ -140,17 +144,20 @@ map.on('load', () => {
             };
         }
 
+
         const filteredDepartures = d3.rollup(
             filterByMinute(departuresByMinute, timeFilter),
             v => v.length,
             d => d.start_station_id
         );
 
+
         const filteredArrivals = d3.rollup(
             filterByMinute(arrivalsByMinute, timeFilter),
             v => v.length,
             d => d.end_station_id
         );
+
 
         const filteredStations = stations.map(station => {
             let newStation = { ...station };
@@ -169,6 +176,7 @@ map.on('load', () => {
         };
     }
 
+
     function filterByMinute(tripsByMinute, minute) {
         let minMinute = (minute - 60 + 1440) % 1440,
             maxMinute = (minute + 60) % 1440;
@@ -182,16 +190,15 @@ map.on('load', () => {
         }
     }
 
+
     function updateCircles(stationData) {
         let stationFlow = d3
             .scaleQuantize()
             .domain([0, 1])
             .range([0, 0.5, 1]);
-
         const radiusScale = d3.scaleSqrt()
             .domain([0, d3.max(stationData, d => d.totalTraffic)])
             .range([0, 20]);
-
         circles = svg
             .selectAll('circle')
             .data(stationData, d => d.short_name)
@@ -199,7 +206,7 @@ map.on('load', () => {
             .attr('fill', 'orangered')
             .attr('stroke', 'white')
             .attr('stroke-width', 1)
-            .attr('opacity', 0.8)
+            .attr('opacity', 0.7)
             .attr('r', d => radiusScale(d.totalTraffic))
             .style("--departure-ratio", d => (d.totalTraffic === 0) ? 0.5 : stationFlow(d.departures / d.totalTraffic));
 
