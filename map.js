@@ -1,11 +1,14 @@
-// Set your Mapbox access token
-mapboxgl.accessToken = 'pk.eyJ1IjoiYmVubmluZ2VyIiwiYSI6ImNtN2U0d3p0ZTBhdnQyaW9odnQzcmd5OTcifQ.ttcTw8RcxOKgNxDO6EJ39g';
+// Set up empty arrays (though they are not used in Steps 1-3)
+let departuresByMinute = Array.from({ length: 1440 }, () => []);
+let arrivalsByMinute = Array.from({ length: 1440 }, () => []);
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsbGFzcGx1bmtldHQiLCJhIjoiY203Yzk1aXc2MDF5eTJ0b2tyb2hkeDY3ZiJ9.GUfDb4KmwC9Z7l1aLeJhgQ';
 
 // Initialize the map
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v12',
-    center: [-71.092761, 42.357575], // Cambridge, MA
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [-71.09415, 42.36027], // Centering on Cambridge, MA
     zoom: 12,
     minZoom: 5,
     maxZoom: 18
@@ -14,11 +17,11 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
     console.log("Map has loaded");
 
-    // Define a shared style object for bike lanes
-    const bikeLaneStyle = {
-        'line-color': '#228B22',  // Dark green
-        'line-width': 2.5,
-        'line-opacity': 0.4
+    // Define a shared style for bike lanes
+    const route_style = {
+        'line-color': 'green',
+        'line-width': 2,
+        'line-opacity': 0.6
     };
 
     // Add Boston bike lanes
@@ -28,10 +31,10 @@ map.on('load', () => {
     });
 
     map.addLayer({
-        id: 'bike-lanes-boston',
+        id: 'bike-lanes-1',
         type: 'line',
         source: 'boston_route',
-        paint: bikeLaneStyle
+        paint: route_style
     });
 
     // Add Cambridge bike lanes
@@ -41,16 +44,14 @@ map.on('load', () => {
     });
 
     map.addLayer({
-        id: 'bike-lanes-cambridge',
+        id: 'bike-lanes-2',
         type: 'line',
         source: 'cambridge_route',
-        paint: bikeLaneStyle
+        paint: route_style
     });
 
     // --- STEP 3: Load Bluebikes Stations ---
-    const jsonUrl = 'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
-
-    d3.json(jsonUrl).then(jsonData => {
+    d3.json('https://dsc106.com/labs/lab07/data/bluebikes-stations.json').then(jsonData => {
         console.log('Loaded JSON Data:', jsonData);
 
         // Extract station data
@@ -71,7 +72,7 @@ map.on('load', () => {
                 .style("z-index", "1");  // Ensure it's on top
         }
 
-        // Project longitude & latitude into map coordinates
+        // Function to convert lat/lon to pixel coordinates
         function projectPoint(lon, lat) {
             const point = map.project(new mapboxgl.LngLat(lon, lat));
             return { x: point.x, y: point.y };
@@ -84,7 +85,7 @@ map.on('load', () => {
             .enter()
             .append("circle")
             .attr("r", 5)  // Marker size
-            .attr("fill", "#FF4500")  // Orange-Red color for visibility
+            .attr("fill", "orangered")  // Station marker color
             .attr("opacity", 0.75)
             .attr("stroke", "black")
             .attr("stroke-width", 0.5);
@@ -110,4 +111,5 @@ map.on('load', () => {
     }).catch(error => {
         console.error('Error loading JSON:', error);
     });
+
 });
