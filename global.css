@@ -1,4 +1,3 @@
-/* General body styling */
 body {
   font: 100%/1.5 system-ui, sans-serif;
   display: flex;
@@ -9,30 +8,3 @@ body {
   margin: auto;
   padding: 1em;
 }
-
-/* Make sure the map takes up the full screen */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-/* Style the Mapbox container */
-#map {
-  width: 100%;    
-  height: 90vh; /* Adjust as needed */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
-  border-radius: 8px; /* Optional: rounded corners */
-}
-
-
-/* Style the SVG overlay */
-#map svg {
-  position: absolute;  /* Position it on top of the map */
-  z-index: 1;          /* Ensure it's above the map */
-  width: 100%;         /* Make it the full width of the map */
-  height: 100%;        /* Make it the full height of the map */
-  pointer-events: none; /* Allow the user to interact with the map */
-}
-

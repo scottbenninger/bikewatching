@@ -4,15 +4,15 @@ let arrivalsByMinute = Array.from({ length: 1440 }, () => []);
 mapboxgl.accessToken =
     'pk.eyJ1IjoiYmVubmluZ2VyIiwiYSI6ImNtN2U0d3p0ZTBhdnQyaW9odnQzcmd5OTcifQ.ttcTw8RcxOKgNxDO6EJ39g';
 
-const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/light-v11',
-    center: [-71.09415, 42.36027],
-    zoom: 12,
-    minZoom: 5,
-    maxZoom: 18
-});
-
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',  // Use a full-color map style
+        center: [-71.09415, 42.36027],
+        zoom: 12,
+        minZoom: 5,
+        maxZoom: 18
+    });
+    
 function minutesSinceMidnight(date) {
     return date.getHours() * 60 + date.getMinutes();
 }
