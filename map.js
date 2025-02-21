@@ -14,9 +14,9 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
     // Define a shared style object for consistency
     const bikeLaneStyle = {
-        'line-color': '#32D400',  // Bright green
-        'line-width': 4,          // Thicker lines
-        'line-opacity': 0.7       // More visible
+        'line-color': '#228B22',  // Bright green
+        'line-width': 2.5,          // Thicker lines
+        'line-opacity': 0.6       // More visible
     };
 
     // Add Boston bike lanes source
