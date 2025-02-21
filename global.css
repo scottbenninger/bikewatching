@@ -36,8 +36,3 @@ html, body {
   pointer-events: none; /* Allow the user to interact with the map */
 }
 
-#map svg {
-  background: yellow;
-  opacity: 50%;
-}
-
